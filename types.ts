@@ -1,10 +1,14 @@
+
 export enum View {
   LANDING = 'LANDING',
   AUTH = 'AUTH',
+  SIGNUP = 'SIGNUP',
+  FORGOT_PASSWORD = 'FORGOT_PASSWORD',
   ONBOARDING = 'ONBOARDING',
   DASHBOARD = 'DASHBOARD',
   EXPLORE = 'EXPLORE',
   CLUB_DETAIL = 'CLUB_DETAIL',
+  EVENT_DETAIL = 'EVENT_DETAIL',
   CREATE_CLUB = 'CREATE_CLUB',
   CREATE_EVENT = 'CREATE_EVENT',
   PROFILE = 'PROFILE',
@@ -30,7 +34,14 @@ export interface Club {
   coverImage: string;
   tags: string[];
   members: User[];
+  visibility: 'public' | 'private';
+  location: string;
+  ownerId: string;
+  founderName?: string;
+  founderBio?: string;
 }
+
+export type RSVPStatus = 'going' | 'maybe' | 'not_going';
 
 export interface Event {
   id: string;
@@ -40,7 +51,10 @@ export interface Event {
   date: string;
   location: string;
   image?: string;
-  attendees: number;
+  bannerImage?: string;
+  capacity?: number;
+  attendees: number; // count
+  rsvps: Record<string, RSVPStatus>; // userId -> status
 }
 
 export interface Post {
@@ -50,6 +64,23 @@ export interface Post {
   content: string;
   likes: number;
   timestamp: string;
+}
+
+export interface Notification {
+    id: string;
+    userId: string;
+    type: 'EVENT_INVITE' | 'NEW_POST' | 'RSVP_UPDATE' | 'CLUB_JOIN';
+    message: string;
+    read: boolean;
+    timestamp: string;
+    linkId?: string; // clubId or eventId
+    viewToNavigate?: View;
+}
+
+export interface ToastMessage {
+    id: string;
+    type: 'success' | 'error' | 'info';
+    message: string;
 }
 
 export const CATEGORIES = [
